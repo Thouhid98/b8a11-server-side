@@ -55,13 +55,13 @@ async function run() {
         })
 
         // Route to get blogs by category
-        // app.get('/blogs/:category', async (req, res) => {
-        //     const { category } = req.params;
-        //     console.log(category);
-        //     const blogs = await BlogPost.find({ category });
-        //     res.json(blogs);
+        app.get('/blogs/:category', async (req, res) => {
+            const { category } = req.params;
+            console.log(category);
+            const blogs = await BlogPost.find({ category });
+            res.json(blogs);
 
-        // });
+        });
 
 
         // User Related APIS 
@@ -73,9 +73,17 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result);
         })
+        
 
         // Add to WishList 
-       
+        const wishListCollection = client.db('BlogDB').collection('wishlist');
+
+        app.post('/addtoWishlist', async (req, res) => {
+            const newwishList = req.body;
+            console.log(newwishList);
+            const result = await wishListCollection.insertOne(newwishList);
+            res.send(result);
+        })
 
 
 
