@@ -30,11 +30,19 @@ async function run() {
         // Blogs APIS 
         const blogCollection = client.db('BlogDB').collection('blogs')
 
+        // Add blog API 
         app.post('/blogs', async (req, res) => {
             const newblogs = req.body;
             console.log(newblogs);
             const result = await blogCollection.insertOne(newblogs)
             res.send(result)
+        })
+
+        // Get Data for All Blog API 
+        app.get('/allblogs', async(req, res)=>{
+            const allblogs = await blogCollection.find().toArray();
+            console.log(allblogs);
+            res.send(allblogs)
         })
 
 
