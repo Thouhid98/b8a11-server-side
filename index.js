@@ -73,7 +73,7 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result);
         })
-        
+
 
         // Add to WishList 
         const wishListCollection = client.db('BlogDB').collection('wishlist');
@@ -85,6 +85,14 @@ async function run() {
             res.send(result);
         })
 
+        // show wishlist to wishlist Page 
+        app.get('/fetchwishlist/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email);
+            const query = { email: email };
+            const result = await wishListCollection.find(query).toArray();
+            res.send(result);
+        })
 
 
 
