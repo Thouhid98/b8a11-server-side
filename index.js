@@ -55,13 +55,13 @@ async function run() {
         })
 
         // Route to get blogs by category
-        app.get('/blogs/:category', async (req, res) => {
-            const { category } = req.params;
-            console.log(category);
-            const blogs = await BlogPost.find({ category });
-            res.json(blogs);
+        // app.get('/blogs/:category', async (req, res) => {
+        //     const { category } = req.params;
+        //     console.log(category);
+        //     const blogs = await BlogPost.find({ category });
+        //     res.json(blogs);
 
-        });
+        // });
 
 
         // User Related APIS 
@@ -86,13 +86,31 @@ async function run() {
         })
 
         // show wishlist to wishlist Page 
+        // app.get('/fetchwishlist/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     console.log(email);
+        //     const query = { email: email };
+        //     const result = await wishListCollection.find(query).toArray();
+        //     res.send(result);
+        // })
+
+        // Wishlist API2 
         app.get('/fetchwishlist/:email', async (req, res) => {
             const email = req.params.email;
             console.log(email);
-            const query = { email: email };
+            const query = { email: 'thouhid@vai.com' };
             const result = await wishListCollection.find(query).toArray();
             res.send(result);
         })
+
+        // Wishlist API2 Delete
+        app.delete('/fetchwishlist/:email/:id', async(req, res)=>{
+            const id = req.params.id;
+            console.log(id);
+            const query = {_id: id}
+            const result = await wishListCollection.deleteOne(query);
+            res.send(result);
+          })
 
 
 
