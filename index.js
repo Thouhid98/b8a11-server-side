@@ -39,24 +39,43 @@ async function run() {
         })
 
         // Get Data for All Blog API 
-        app.get('/allblogs', async(req, res)=>{
+        app.get('/allblogs', async (req, res) => {
             const allblogs = await blogCollection.find().toArray();
             console.log(allblogs);
             res.send(allblogs)
         })
 
         // Blogdetails Api 
-        app.get('/blogdetails/:id', async(req, res)=>{
+        app.get('/blogdetails/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id);
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await blogCollection.findOne(query);
             res.send(result);
         })
 
+        // Route to get blogs by category
+        // app.get('/blogs/:category', async (req, res) => {
+        //     const { category } = req.params;
+        //     console.log(category);
+        //     const blogs = await BlogPost.find({ category });
+        //     res.json(blogs);
+
+        // });
 
 
+        // User Related APIS 
+        const userCollection = client.db('BlogDB').collection('user');
 
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            console.log(user);
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        })
+
+        // Add to WishList 
+       
 
 
 
