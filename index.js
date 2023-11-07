@@ -52,6 +52,32 @@ async function run() {
             res.send(recentblogs)
         })
 
+        // Api for Featured blogs 
+        app.get('/featuredblogs', async (req, res) => {
+            const pipeline = [
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        shortdes:1,
+                        photo:1,
+                        category:1,
+                        longdescription: 1,
+                        length: { $strLenCP: '$longdes' },
+                    },
+                },
+                {
+                    $sort: { length: -1 },
+                },
+                {
+                    $limit: 5,
+                },
+            ];
+            const result = await blogCollection.aggregate(pipeline).toArray();
+            console.log(result);
+            res.send(result)
+        })
+
         // Blog details Api 
         app.get('/blogdetails/:id', async (req, res) => {
             const id = req.params.id;
