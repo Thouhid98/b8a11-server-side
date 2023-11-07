@@ -45,7 +45,14 @@ async function run() {
             res.send(allblogs)
         })
 
-        // Blogdetails Api 
+        // Get Recent Posts By Date 
+        app.get('/latestblogs', async (req, res) => {
+            const recentblogs = await blogCollection.find().sort({ date: -1 }).limit(6).toArray();
+            console.log(recentblogs);
+            res.send(recentblogs)
+        })
+
+        // Blog details Api 
         app.get('/blogdetails/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id);
@@ -104,13 +111,13 @@ async function run() {
         })
 
         // Wishlist API2 Delete
-        app.delete('/fetchwishlist/:email/:id', async(req, res)=>{
+        app.delete('/fetchwishlist/:email/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id);
-            const query = {_id: id}
+            const query = { _id: id }
             const result = await wishListCollection.deleteOne(query);
             res.send(result);
-          })
+        })
 
 
 
