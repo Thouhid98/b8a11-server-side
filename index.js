@@ -191,6 +191,12 @@ async function run() {
             res.send(result);
         })
 
+        // Fetch comment from database 
+        app.get('/getcomments', async(req, res)=>{
+            const allcoments = await commentCollection.find().limit(3).toArray();
+            console.log(allcoments);
+            res.send(allcoments)
+        })
       
 
 
