@@ -181,6 +181,17 @@ async function run() {
             res.send(result);
         })
 
+        // User Comment Collection 
+        const commentCollection = client.db('BlogDB').collection('comments')
+
+        app.post('/comments', async(req, res) => {
+            const comment = req.body;
+            console.log(comment);
+            const result = await commentCollection.insertOne(comment);
+            res.send(result);
+        })
+
+      
 
 
 
