@@ -60,6 +60,9 @@ async function run() {
                         _id: 1,
                         title: 1,
                         shortdes: 1,
+                        email:1,
+                        ownerpic:1,
+                        name:1,
                         photo: 1,
                         category: 1,
                         longdescription: 1,
@@ -105,6 +108,16 @@ async function run() {
             const user = req.body;
             console.log(user);
             const result = await userCollection.insertOne(user);
+            res.send(result);
+        })
+
+
+        // Update Brand Blogs Api
+        app.get('/updateblog/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: new ObjectId(id) };
+            const result = await blogCollection.findOne(query);
             res.send(result);
         })
 
