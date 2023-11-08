@@ -59,9 +59,9 @@ async function run() {
                     $project: {
                         _id: 1,
                         title: 1,
-                        shortdes:1,
-                        photo:1,
-                        category:1,
+                        shortdes: 1,
+                        photo: 1,
+                        category: 1,
                         longdescription: 1,
                         length: { $strLenCP: '$longdes' },
                     },
@@ -88,13 +88,14 @@ async function run() {
         })
 
         // Route to get blogs by category
-        // app.get('/blogs/:category', async (req, res) => {
-        //     const { category } = req.params;
-        //     console.log(category);
-        //     const blogs = await BlogPost.find({ category });
-        //     res.json(blogs);
+        app.get('/blogs/:category', async (req, res) => {
+            const { category } = req.query;
+            const query = category ? { category } : {};
+            const blogs = await blogCollection.find(query).toArray();
+            res.json(blogs);
+        });
 
-        // });
+
 
 
         // User Related APIS 
@@ -106,6 +107,28 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result);
         })
+
+        // Update API 
+        // User Update His Blog 
+        app.put('/updateblog/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true }
+            const newupdateBlog = req.body;
+            const allblogsUpdate = {
+                $set: {
+                    title: newupdateBlog.title,
+                    shortdes: newupdateBlog.shortdes,
+                    longdes: newupdateBlog.longdes,
+                    date: newupdateBlog.date,
+                    photo: newupdateBlog.photo,
+                }
+            }
+            const result = await blogCollection.updateOne(filter, allblogsUpdate, options)
+            res.send(result)
+        })
+
 
 
         // Add to WishList 
@@ -119,22 +142,22 @@ async function run() {
         })
 
         // show wishlist to wishlist Page 
-        // app.get('/fetchwishlist/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     console.log(email);
-        //     const query = { email: email };
-        //     const result = await wishListCollection.find(query).toArray();
-        //     res.send(result);
-        // })
-
-        // Wishlist API2 
         app.get('/fetchwishlist/:email', async (req, res) => {
             const email = req.params.email;
             console.log(email);
-            const query = { email: 'thouhid@vai.com' };
+            const query = { email: email };
             const result = await wishListCollection.find(query).toArray();
             res.send(result);
         })
+
+        // Wishlist API2 
+        // app.get('/fetchwishlist/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     console.log(email);
+        //     const query = { email: 'thouhid@vai.com' };
+        //     const result = await wishListCollection.find(query).toArray();
+        //     res.send(result);
+        // })
 
         // Wishlist API2 Delete
         app.delete('/fetchwishlist/:email/:id', async (req, res) => {
@@ -157,7 +180,7 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
