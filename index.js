@@ -73,7 +73,7 @@ async function run() {
                     $sort: { length: -1 },
                 },
                 {
-                    $limit: 5,
+                    $limit: 10,
                 },
             ];
             const result = await blogCollection.aggregate(pipeline).toArray();
@@ -193,7 +193,7 @@ async function run() {
 
         // Fetch comment from database 
         app.get('/getcomments', async(req, res)=>{
-            const allcoments = await commentCollection.find().limit(3).toArray();
+            const allcoments = await commentCollection.find().sort({ comment: -1 }).limit(3).toArray();
             console.log(allcoments);
             res.send(allcoments)
         })
